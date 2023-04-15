@@ -52,3 +52,8 @@ My arduino IDE is: 2.0.4
 
 My esp32 libary is: 2.0.7
 
+
+The ESP32 C3 is still not working, but I can already compile and send the board, when I send it here there is an error in the processor
+
+soon more news!!!!
+

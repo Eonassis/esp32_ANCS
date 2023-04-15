@@ -19,7 +19,7 @@ static BLEUUID notificationSourceCharacteristicUUID("9FBF120D-6301-42D9-8C58-25E
 static BLEUUID controlPointCharacteristicUUID("69D1D8F3-45E1-49A8-9821-9BBDFDAAD9D9");
 static BLEUUID dataSourceCharacteristicUUID("22EAC6E9-24D6-4BB5-BE44-B36ACE7C7BFB");
 
-class MySecurity : public BLESecurityCallbacks {
+class MySecurity2 : public BLESecurityCallbacks {
 
     uint32_t onPassKeyRequest(){
         ESP_LOGI(LOG_TAG, "PassKeyRequest");
@@ -48,6 +48,44 @@ class MySecurity : public BLESecurityCallbacks {
             ESP_LOGD(LOG_TAG, "size: %d", length);
         }
     }
+};
+
+
+class MySecurity : public BLESecurityCallbacks {
+
+uint32_t onPassKeyRequest(){
+ESP_LOGI(LOG_TAG, "PassKeyRequest");
+return 123456;
+}
+
+void onPassKeyNotify(uint32_t pass_key){
+ESP_LOGI(LOG_TAG, "On passkey Notify number:%d", pass_key);
+Serial.println("onPassKeyNotify - the key passed : ");
+Serial.println(pass_key);
+}
+
+bool onSecurityRequest(){
+ESP_LOGI(LOG_TAG, "On Security Request");
+Serial.println("onSecurityRequest");
+return true;
+}
+
+void onAuthenticationComplete(esp_ble_auth_cmpl_t cmpl){
+ESP_LOGI(LOG_TAG, "Starting BLE work!");
+if(cmpl.success){
+uint16_t length;
+Serial.println("Auth Complete");
+esp_ble_gap_get_whitelist_size(&length);
+ESP_LOGD(LOG_TAG, "size: %d", length);
+}
+}
+bool onConfirmPIN(uint32_t pass_key){
+ESP_LOGI(LOG_TAG, "The passkey YES/NO number:%d", pass_key);
+Serial.println("onConfirmPIN - pass_key:");
+Serial.println(pass_key);
+vTaskDelay(500);
+return false;
+}
 };
 
 static void dataSourceNotifyCallback(
@@ -168,14 +206,14 @@ class MyClient: public Task {
 }; // MyClient
 
 class MyServerCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer* pServer) {
+    void onConnect(BLEServer* pServer, esp_ble_gatts_cb_param_t *param) {
         Serial.println("********************");
         Serial.println("**Device connected**");
-        Serial.println(BLEAddress(BLEDevice::m_remoteBda).toString().c_str());
+        Serial.println(BLEAddress(param->connect.remote_bda).toString().c_str());
         Serial.println("********************");
         MyClient* pMyClient = new MyClient();
         pMyClient->setStackSize(18000);
-        pMyClient->start(new BLEAddress(BLEDevice::m_remoteBda));
+        pMyClient->start(new BLEAddress(param->connect.remote_bda));
     };
 
     void onDisconnect(BLEServer* pServer) {

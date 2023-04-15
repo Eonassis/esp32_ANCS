@@ -33,10 +33,15 @@ https://github.com/Eonassis/esp32_ANCS
 as i did:
  
 1 - Download the files from this repository
+
 2 - Delete the src folder from the path, in my case it was: C:\Users\userpc\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.7\libraries\BLE
+
 3 - Copy the src folder from the repository to: C:\Users\userpc\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.7\libraries\BLE
+
 3 - Delete the ESP32_BLE_Arduino folder from the path, in my case it was: C:\Users\userpc\Documents\Arduino\libraries
 
+
 My arduino IDE is: 2.0.4
+
 My esp32 libary is: 2.0.7
 

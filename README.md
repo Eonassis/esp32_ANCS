@@ -36,6 +36,7 @@ Set new Call Serial port in ESP32 C3: Serial >> to >> USBSerial
 Ie ESP32 C3 Serial port:
 
 USBSerial.begin(115200);
+
 USBSerial.println("Hello Setup");
 
 I uploaded the modifications made to my fork

@@ -12,6 +12,8 @@
 #include <time.h>
 #include "sdkconfig.h"
 
+ 
+
 static char LOG_TAG[] = "SampleServer";
 
 static BLEUUID ancsServiceUUID("7905F431-B5CE-4E99-A40F-4B1E122D00D0");
@@ -60,13 +62,13 @@ return 123456;
 
 void onPassKeyNotify(uint32_t pass_key){
 ESP_LOGI(LOG_TAG, "On passkey Notify number:%d", pass_key);
-Serial.println("onPassKeyNotify - the key passed : ");
-Serial.println(pass_key);
+USBSerial.println("onPassKeyNotify - the key passed : ");
+USBSerial.println(pass_key);
 }
 
 bool onSecurityRequest(){
 ESP_LOGI(LOG_TAG, "On Security Request");
-Serial.println("onSecurityRequest");
+USBSerial.println("onSecurityRequest");
 return true;
 }
 
@@ -74,15 +76,15 @@ void onAuthenticationComplete(esp_ble_auth_cmpl_t cmpl){
 ESP_LOGI(LOG_TAG, "Starting BLE work!");
 if(cmpl.success){
 uint16_t length;
-Serial.println("Auth Complete");
+USBSerial.println("Auth Complete");
 esp_ble_gap_get_whitelist_size(&length);
 ESP_LOGD(LOG_TAG, "size: %d", length);
 }
 }
 bool onConfirmPIN(uint32_t pass_key){
 ESP_LOGI(LOG_TAG, "The passkey YES/NO number:%d", pass_key);
-Serial.println("onConfirmPIN - pass_key:");
-Serial.println(pass_key);
+USBSerial.println("onConfirmPIN - pass_key:");
+USBSerial.println(pass_key);
 vTaskDelay(500);
 return false;
 }
@@ -93,10 +95,10 @@ static void dataSourceNotifyCallback(
   uint8_t* pData,
   size_t length,
   bool isNotify) {
-    Serial.print("Notify callback for characteristic ");
-    Serial.print(pDataSourceCharacteristic->getUUID().toString().c_str());
-    Serial.print(" of data length ");
-    Serial.println(length);
+    USBSerial.print("Notify callback for characteristic ");
+    USBSerial.print(pDataSourceCharacteristic->getUUID().toString().c_str());
+    USBSerial.print(" of data length ");
+    USBSerial.println(length);
 }
 
 static void NotificationSourceNotifyCallback(
@@ -107,44 +109,44 @@ static void NotificationSourceNotifyCallback(
 {
     if(pData[0]==0)
     {
-        Serial.println("New notification!");
+        USBSerial.println("New notification!");
         switch(pData[2])
         {
             case 0:
-                Serial.println("Category: Other");
+                USBSerial.println("Category: Other");
             break;
             case 1:
-                Serial.println("Category: Incoming call");
+                USBSerial.println("Category: Incoming call");
             break;
             case 2:
-                Serial.println("Category: Missed call");
+                USBSerial.println("Category: Missed call");
             break;
             case 3:
-                Serial.println("Category: Voicemail");
+                USBSerial.println("Category: Voicemail");
             break;
             case 4:
-                Serial.println("Category: Social");
+                USBSerial.println("Category: Social");
             break;
             case 5:
-                Serial.println("Category: Schedule");
+                USBSerial.println("Category: Schedule");
             break;
             case 6:
-                Serial.println("Category: Email");
+                USBSerial.println("Category: Email");
             break;
             case 7:
-                Serial.println("Category: News");
+                USBSerial.println("Category: News");
             break;
             case 8:
-                Serial.println("Category: Health");
+                USBSerial.println("Category: Health");
             break;
             case 9:
-                Serial.println("Category: Business");
+                USBSerial.println("Category: Business");
             break;
             case 10:
-                Serial.println("Category: Location");
+                USBSerial.println("Category: Location");
             break;
             case 11:
-                Serial.println("Category: Entertainment");
+                USBSerial.println("Category: Entertainment");
             break;
             default:
             break;
@@ -207,19 +209,19 @@ class MyClient: public Task {
 
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer, esp_ble_gatts_cb_param_t *param) {
-        Serial.println("********************");
-        Serial.println("**Device connected**");
-        Serial.println(BLEAddress(param->connect.remote_bda).toString().c_str());
-        Serial.println("********************");
+        USBSerial.println("********************");
+        USBSerial.println("**Device connected**");
+        USBSerial.println(BLEAddress(param->connect.remote_bda).toString().c_str());
+        USBSerial.println("********************");
         MyClient* pMyClient = new MyClient();
         pMyClient->setStackSize(18000);
         pMyClient->start(new BLEAddress(param->connect.remote_bda));
     };
 
     void onDisconnect(BLEServer* pServer) {
-        Serial.println("************************");
-        Serial.println("**Device  disconnected**");
-        Serial.println("************************");
+        USBSerial.println("************************");
+        USBSerial.println("**Device  disconnected**");
+        USBSerial.println("************************");
     }
 };
 
@@ -267,7 +269,8 @@ void SampleSecureServer(void)
 
 void setup()
 {
-    Serial.begin(115200);
+    USBSerial.begin(115200);
+    USBSerial.println("Hello Setup");
     SampleSecureServer();
 }
 void loop()

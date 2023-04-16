@@ -1,3 +1,7 @@
+I get it not through the arduino IDE, I get it through the ESP-IDF security that everyone switches to it
+
+https://github.com/espressif/esp-idf/blob/master/examples/bluetooth/bluedroid/ble/ble_ancs/README.md
+
 # esp32_ANCS
 
 Example of ANCS for the ESP32

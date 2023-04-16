@@ -31,6 +31,13 @@ instructions for @vijitSingh97 #erro esp_ble_gap_update_whitelist in:
 
 https://github.com/nkolban/esp32-snippets/issues/472#issuecomment-501418988
 
+Set new Call Serial port in ESP32 C3: Serial >> to >> USBSerial
+
+Ie ESP32 C3 Serial port:
+
+USBSerial.begin(115200);
+USBSerial.println("Hello Setup");
+
 I uploaded the modifications made to my fork
 
 https://github.com/Eonassis/esp32_ANCS

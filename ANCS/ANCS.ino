@@ -1,3 +1,6 @@
+#define CORE_DEBUG_LEVEL 3
+#define LOG_LOCAL_LEVEL ESP_LOG_DEBUG
+
 #include <Arduino.h>
 #include "BLEDevice.h"
 #include "BLEServer.h"
@@ -226,7 +229,9 @@ class MyServerCallbacks: public BLEServerCallbacks {
 };
 
 class MainBLEServer: public Task {
+   //USBSerial.println("Start Task MainBLEServer");
     void run(void *data) {
+        USBSerial.println("Start MainBLEServer");
         ESP_LOGD(LOG_TAG, "Starting BLE work!");
         esp_log_buffer_char(LOG_TAG, LOG_TAG, sizeof(LOG_TAG));
         esp_log_buffer_hex(LOG_TAG, LOG_TAG, sizeof(LOG_TAG));
@@ -262,15 +267,24 @@ class MainBLEServer: public Task {
 
 void SampleSecureServer(void)
 {
+    
+    USBSerial.println("Start SampleSecureServer");
     MainBLEServer* pMainBleServer = new MainBLEServer();
     pMainBleServer->setStackSize(20000);
     pMainBleServer->start();
+
+    USBSerial.println("End SampleSecureServer");
 }
 
 void setup()
 {
     USBSerial.begin(115200);
+    USBSerial.println("printlnb");
+    USBSerial.setDebugOutput(true);
     USBSerial.println("Hello Setup");
+    ESP_LOGE(LOG_TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>LOGE");
+
+
     SampleSecureServer();
 }
 void loop()
